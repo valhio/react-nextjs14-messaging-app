@@ -1,4 +1,5 @@
 import Image from "next/image";
+import AuthForm from "./components/AuthForm";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
           height={48}
           className="mx-auto w-auto"></Image>
 
+        {/* App Title */}
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <h2 className="mt-6 text-center text-3xl font-extrabold tracking-tight text-gray-900">
             RilaTalks
@@ -27,6 +29,10 @@ export default function Home() {
             Sign in to your account
           </h2>
         </div>
+
+        {/* Auth Form */}
+        <AuthForm />
+
       </div>
     </div>
   );
