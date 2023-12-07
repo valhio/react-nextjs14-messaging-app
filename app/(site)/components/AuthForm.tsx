@@ -7,6 +7,7 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import AuthSocialButton from "./AuthSocialButton";
 import { BsGithub, BsGoogle, BsFacebook } from "react-icons/bs";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 type Variant = "LOGIN" | "REGISTER" | "FORGOT_PASSWORD";
 
@@ -43,12 +44,23 @@ const AuthForm = () => {
 
     if (variant === "LOGIN") {
       // NextAuth Login Call
-    } else if (variant === "REGISTER") {// Axios Register Call
-      // this is the same as axios.post("http://localhost:3000/api/register", data);. The reason we can use /api/register is because we have a proxy in our package.json file that redirects all requests to /api to http://localhost:3000/api. 
+    } else if (variant === "REGISTER") {
+      // Axios Register Call
+      // this is the same as axios.post("http://localhost:3000/api/register", data);. The reason we can use /api/register is because we have a proxy in our package.json file that redirects all requests to /api to http://localhost:3000/api.
       // /api/register is the path because we have a route in app/api/register/route.ts that handles the request
       // data is the data we are sending to the server. In this case, it is the form data that the user entered (name, email, password).
       // Axios is a library that allows us to make HTTP requests. It is similar to fetch, but it has some extra features that make it easier to use (e.g. it automatically converts the response to JSON, it has a built-in way to handle errors, etc.)
-      axios.post("/api/register", data); 
+      axios
+        .post("/api/register", data)
+        .catch((error) => {
+          // error.response.data is the response from the server. In this case, it is an object with a message property that contains the error message.
+          // toast.error is a function from the react-hot-toast library that displays an error message. It is similar to console.error, but it displays the message in a nice way.
+          toast.error(
+            "An error occurred. Please try again." +
+              "\n If the problem persists, please contact support or try again later."
+          );
+        })
+        .finally(() => setIsLoading(false));
     } else if (variant === "FORGOT_PASSWORD") {
       // forgot password
     }
