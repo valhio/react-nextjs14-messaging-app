@@ -8,6 +8,7 @@ import AuthSocialButton from "./AuthSocialButton";
 import { BsGithub, BsGoogle, BsFacebook } from "react-icons/bs";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { signIn } from "next-auth/react";
 
 type Variant = "LOGIN" | "REGISTER" | "FORGOT_PASSWORD";
 
@@ -44,6 +45,18 @@ const AuthForm = () => {
 
     if (variant === "LOGIN") {
       // NextAuth Login Call
+      // signIn is a function from the next-auth library that sends a request to the server to log in the user. It returns a promise that resolves to an object with a session property that contains the user's session data (e.g. name, email, etc.). If there is an error, it rejects with an object that contains an error property that contains the error message.
+      signIn("credentials", {
+        // credentials is the provider, and the second argument is the data we are sending to the server. In this case, it is the form data that the user entered (email, password).
+        ...data,
+        redirect: false, // redirect: false means that the server will not redirect the user to the login page if there is an error. Instead, it will return the error message in the response.
+      })
+        .then((response) => {
+          if (response?.error) toast.error(response.error);
+          if (response?.ok && !response?.error)
+            toast.success("Logged in successfully");
+        })
+        .finally(() => setIsLoading(false));
     } else if (variant === "REGISTER") {
       // Axios Register Call
       // this is the same as axios.post("http://localhost:3000/api/register", data);. The reason we can use /api/register is because we have a proxy in our package.json file that redirects all requests to /api to http://localhost:3000/api.
