@@ -85,6 +85,14 @@ const AuthForm = () => {
     setIsLoading(true);
 
     // NextAuth Social Login Call
+    signIn(action, { redirect: false })
+      .then((response) => {
+        if (response?.error)
+          toast.error("An error occurred. Please try again.");
+        if (response?.ok && !response?.error)
+          toast.success("Logged in successfully");
+      })
+      .finally(() => setIsLoading(false));
   };
 
   // handleSubmit passes the form data to the onSubmit function when the form is submitted. It also prevents the default browser behavior of reloading the page.
