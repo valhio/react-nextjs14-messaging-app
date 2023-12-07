@@ -47,6 +47,7 @@ const AuthForm = () => {
       // this is the same as axios.post("http://localhost:3000/api/register", data);. The reason we can use /api/register is because we have a proxy in our package.json file that redirects all requests to /api to http://localhost:3000/api. 
       // /api/register is the path because we have a route in app/api/register/route.ts that handles the request
       // data is the data we are sending to the server. In this case, it is the form data that the user entered (name, email, password).
+      // Axios is a library that allows us to make HTTP requests. It is similar to fetch, but it has some extra features that make it easier to use (e.g. it automatically converts the response to JSON, it has a built-in way to handle errors, etc.)
       axios.post("/api/register", data); 
     } else if (variant === "FORGOT_PASSWORD") {
       // forgot password
