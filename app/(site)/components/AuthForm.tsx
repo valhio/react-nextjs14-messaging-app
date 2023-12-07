@@ -231,6 +231,7 @@ const AuthForm = () => {
         </form>
       </div>
     </div>
+    
   );
 };
 
