@@ -6,6 +6,7 @@ import { useCallback, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import AuthSocialButton from "./AuthSocialButton";
 import { BsGithub, BsGoogle, BsFacebook } from "react-icons/bs";
+import axios from "axios";
 
 type Variant = "LOGIN" | "REGISTER" | "FORGOT_PASSWORD";
 
@@ -42,8 +43,11 @@ const AuthForm = () => {
 
     if (variant === "LOGIN") {
       // NextAuth Login Call
-    } else if (variant === "REGISTER") {
-      // Axios Register Call
+    } else if (variant === "REGISTER") {// Axios Register Call
+      // this is the same as axios.post("http://localhost:3000/api/register", data);. The reason we can use /api/register is because we have a proxy in our package.json file that redirects all requests to /api to http://localhost:3000/api. 
+      // /api/register is the path because we have a route in app/api/register/route.ts that handles the request
+      // data is the data we are sending to the server. In this case, it is the form data that the user entered (name, email, password).
+      axios.post("/api/register", data); 
     } else if (variant === "FORGOT_PASSWORD") {
       // forgot password
     }
