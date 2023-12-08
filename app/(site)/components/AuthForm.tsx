@@ -2,7 +2,7 @@
 
 import Button from "@/app/components/Button";
 import Input from "@/app/components/inputs/Input";
-import { useCallback, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import AuthSocialButton from "./AuthSocialButton";
 import { BsGithub, BsGoogle, BsFacebook } from "react-icons/bs";
@@ -12,7 +12,13 @@ import { signIn } from "next-auth/react";
 
 type Variant = "LOGIN" | "REGISTER" | "FORGOT_PASSWORD";
 
-const AuthForm = () => {
+interface AuthFormProps {
+  // Login or Register state
+  setSelectedVariant: Dispatch<SetStateAction<Variant>>;
+}
+
+// const AuthForm = ({onSelectedVariant}: AuthFormProps) => {
+const AuthForm = ({ setSelectedVariant }: AuthFormProps) => {
   const [variant, setVariant] = useState<Variant>("LOGIN");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -20,12 +26,13 @@ const AuthForm = () => {
     // useCallback is a hook that returns a memoized callback. What this means is that the function will only be created once, and then it will be reused on subsequent renders. This is useful when passing callbacks to optimized child components that rely on reference equality to prevent unnecessary renders (e.g. shouldComponentUpdate).
     if (variant === "LOGIN") {
       setVariant("REGISTER");
+      setSelectedVariant("REGISTER");
     } else if (variant === "REGISTER") {
       setVariant("LOGIN");
+      setSelectedVariant("LOGIN");
     } else if (variant === "FORGOT_PASSWORD") {
-      setVariant("LOGIN");
     }
-  }, [variant]); // this variable "variant" is called inside the function, so we need to add it to the dependencies array
+  }, [variant, setSelectedVariant]); // this variable "variant" and "setSelectedVariant" are called inside the function, so we need to add them to the dependencies array
 
   const {
     // These are the exported functions from react-hook-form
@@ -148,13 +155,16 @@ const AuthForm = () => {
                 Remember me
               </label>
             </div>
-            <div className="text-sm">
-              <a
-                href="#"
-                className="font-medium text-rila-orange hover:text-rila-orange-hover">
-                Forgot your password?
-              </a>
-            </div>
+
+            {variant === "LOGIN" && (
+              <div className="text-sm">
+                <a
+                  href="#"
+                  className="font-medium text-rila-orange hover:text-rila-orange-hover">
+                  Forgot your password?
+                </a>
+              </div>
+            )}
           </div>
 
           <div className="mt-6">
@@ -231,7 +241,6 @@ const AuthForm = () => {
         </form>
       </div>
     </div>
-    
   );
 };
 
