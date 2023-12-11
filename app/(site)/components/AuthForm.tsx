@@ -197,15 +197,6 @@ const AuthForm = ({ setSelectedVariant }: AuthFormProps) => {
                 text="Sign in with Facebook"
                 onClick={() => socialAction("facebook")}
               />
-              {/* <div>
-                <Button
-                  type="button"
-                  fullWidth={true}
-                  secondary={true}
-                  onClick={() => socialAction("google")}>
-                  Google
-                </Button>
-              </div> */}
             </div>
           </div>
 
