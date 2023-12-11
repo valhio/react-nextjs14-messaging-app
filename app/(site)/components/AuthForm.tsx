@@ -31,13 +31,13 @@ const AuthForm = ({ setSelectedVariant }: AuthFormProps) => {
   const [variant, setVariant] = useState<Variant>("LOGIN");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => { // useEffect is a hook that runs a function after the component is rendered. In this case, it runs the function when the session changes. This is useful when you want to do something when the session changes (e.g. show a toast message when the user logs in).
+  useEffect(() => {
+    // useEffect is a hook that runs a function after the component is rendered. In this case, it runs the function when the session changes. This is useful when you want to do something when the session changes (e.g. show a toast message when the user logs in).
     if (session?.status === "authenticated") {
       router.push("/users");
       toast.success("Logged in successfully");
     }
   }, [session?.status, router]);
-
 
   const toggleVariant = useCallback(() => {
     // useCallback is a hook that returns a memoized callback. What this means is that the function will only be created once, and then it will be reused on subsequent renders. This is useful when passing callbacks to optimized child components that rely on reference equality to prevent unnecessary renders (e.g. shouldComponentUpdate).
@@ -78,11 +78,14 @@ const AuthForm = ({ setSelectedVariant }: AuthFormProps) => {
       })
         .then((response) => {
           if (response?.error) toast.error(response.error);
-          if (response?.ok && !response?.error)
-            toast.success("Logged in successfully");
+          if (response?.ok && !response?.error) {
+            router.push("/users");
+          }
         })
         .finally(() => setIsLoading(false));
-    } else if (variant === "REGISTER") {
+    }
+
+    if (variant === "REGISTER") {
       // Axios Register Call
       // this is the same as axios.post("http://localhost:3000/api/register", data);. The reason we can use /api/register is because we have a proxy in our package.json file that redirects all requests to /api to http://localhost:3000/api.
       // /api/register is the path because we have a route in app/api/register/route.ts that handles the request
@@ -90,6 +93,7 @@ const AuthForm = ({ setSelectedVariant }: AuthFormProps) => {
       // Axios is a library that allows us to make HTTP requests. It is similar to fetch, but it has some extra features that make it easier to use (e.g. it automatically converts the response to JSON, it has a built-in way to handle errors, etc.)
       axios
         .post("/api/register", data)
+        .then((response) => signIn("credentials", data))
         .catch((error) => {
           // error.response.data is the response from the server. In this case, it is an object with a message property that contains the error message.
           // toast.error is a function from the react-hot-toast library that displays an error message. It is similar to console.error, but it displays the message in a nice way.
@@ -99,11 +103,11 @@ const AuthForm = ({ setSelectedVariant }: AuthFormProps) => {
           );
         })
         .finally(() => setIsLoading(false));
-    } else if (variant === "FORGOT_PASSWORD") {
-      // forgot password
     }
 
-    // setIsLoading(false);
+    if (variant === "FORGOT_PASSWORD") {
+      // forgot password
+    }
   };
 
   const socialAction = (action: string) => {
@@ -114,8 +118,9 @@ const AuthForm = ({ setSelectedVariant }: AuthFormProps) => {
       .then((response) => {
         if (response?.error)
           toast.error("An error occurred. Please try again.");
-        if (response?.ok && !response?.error)
-          toast.success("Logged in successfully");
+        if (response?.ok && !response?.error){
+          router.push("/users");
+        }
       })
       .finally(() => setIsLoading(false));
   };
