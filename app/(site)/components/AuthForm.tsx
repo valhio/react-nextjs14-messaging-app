@@ -30,8 +30,7 @@ const AuthForm = ({ setSelectedVariant }: AuthFormProps) => {
     } else if (variant === "REGISTER") {
       setVariant("LOGIN");
       setSelectedVariant("LOGIN");
-    } else if (variant === "FORGOT_PASSWORD") {
-    }
+    } else if (variant === "FORGOT_PASSWORD") {}
   }, [variant, setSelectedVariant]); // this variable "variant" and "setSelectedVariant" are called inside the function, so we need to add them to the dependencies array
 
   const {
@@ -47,7 +46,7 @@ const AuthForm = ({ setSelectedVariant }: AuthFormProps) => {
     },
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => { // Should this run on client side or server side? If it runs on client side, then the user can see the error message. If it runs on server side, then the user cannot see the error message.
     setIsLoading(true);
 
     if (variant === "LOGIN") {
