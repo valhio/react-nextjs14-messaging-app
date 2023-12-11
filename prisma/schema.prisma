@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User{
+  // Some fields have been set to optional because social media logins are enabled and they don't have all the fields that are required for a normal login.
+  // id        String    @id @default(cuid())
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId // What this does is that it tells Prisma to use the _id field in MongoDB as the id field in Prisma. This is necessary because MongoDB uses _id as the default primary key field name. If you don't do this, Prisma will create a new id field in MongoDB and use that as the primary key instead.
+  name      String?
+  email     String?    @unique
+  emailVerified DateTime? 
+  image     String?
+  hashedPassword String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+// This conversation relationship is a one-to-many relationship. It tells Prisma that a user can have many conversations. The fields: [conversationIds] tells Prisma that the conversationIds field in the user model is related to the id field in the conversation model. The references: [id] tells Prisma that the id field in the conversation model is related to the conversationIds field in the user model. This is necessary because Prisma needs to know how to relate the two models.
+  conversationIds String[] @db.ObjectId // This is an array of conversation ids. This is necessary because MongoDB doesn't support many-to-many relationships. So we have to store the ids of the conversations that a user is a part of in an array in the user model.
+  conversations Conversation[] @relation(fields: [conversationIds], references: [id]) // This is the relationship. It tells Prisma that the conversationsIds field in the user model is related to the id field in the conversation model. This is necessary because Prisma needs to know how to relate the two models.
+
+// This message relationship is a one-to-many relationship. It tells Prisma that a user can have many messages. The fields: [messageIds] tells Prisma that the messageIds field in the user model is related to the id field in the message model. The references: [id] tells Prisma that the id field in the message model is related to the messageIds field in the user model. This is necessary because Prisma needs to know how to relate the two models.
+  seenMessageIds String[] @db.ObjectId // This is an array of message ids. This is necessary because MongoDB doesn't support many-to-many relationships. So we have to store the ids of the messages that a user has seen in an array in the user model.
+  seenMessages Message[] @relation("Seen", fields: [seenMessageIds], references: [id]) // This is the relationship. It tells Prisma that the seenMessagesIds field in the user model is related to the id field in the message model. This is necessary because Prisma needs to know how to relate the two models. The "Seen" is the name of the relationship. It is necessary because we have two relationships between the user and message models. One is the "messages" relationship and the other is the "seenMessages" relationship. So we have to give them different names so that Prisma can differentiate between them.
+
+  accounts Account[]
+  messages Message[]
+}
+
+model Account{
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId // What this does is that it tells Prisma to use the _id field in MongoDB as the id field in Prisma. This is necessary because MongoDB uses _id as the default primary key field name. If you don't do this, Prisma will create a new id field in MongoDB and use that as the primary key instead.
+  userId    String   @db.ObjectId
+  type      String
+  provider  String // This is the name of the provider. For example, Google, Facebook, etc.
+  providerAccountId String // This is the id that the provider gives to the user. For example, Google gives a user a Google id. Facebook gives a user a Facebook id. This is necessary because we need to know which user is logged in.
+  refresh_token String? @db.String 
+  access_token String? @db.String
+  expires_at Int?
+  token_type String?
+  scope String?
+  id_token String? @db.String
+  session_state String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade) // What this does is it maps the User model to the userId field in the Account model. This is necessary because Prisma needs to know how to relate the two models and then it references the id field in the User model. The onDelete: Cascade tells Prisma that if a user is deleted, then all of the accounts that are related to that user should also be deleted.
+
+  @@unique([provider, providerAccountId]) // This tells Prisma that the combination of the provider and providerAccountId fields should be unique. This is necessary because a user can't have two accounts with the same provider and providerAccountId.
+ }
+
+
+model Conversation{
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId // What this does is that it tells Prisma to use the _id field in MongoDB as the id field in Prisma. This is necessary because MongoDB uses _id as the default primary key field name. If you don't do this, Prisma will create a new id field in MongoDB and use that as the primary key instead.
+  createdAt DateTime  @default(now())
+  // lastMessageAt DateTime @default(now())
+  lastMessageAt DateTime @updatedAt 
+  name      String?
+  isGroup   Boolean @default(false)
+
+  messagesIds String[] @db.ObjectId // This is an array of message ids. This is necessary because MongoDB doesn't support many-to-many relationships. So we have to store the ids of the messages that are in a conversation in an array in the conversation model.
+  messages Message[] 
+
+  userIds String[] @db.ObjectId // This is an array of user ids. This is necessary because MongoDB doesn't support many-to-many relationships. So we have to store the ids of the users that are in a conversation in an array in the conversation model.
+  users User[] @relation(fields: [userIds], references: [id]) // This is the relationship. It tells Prisma that the userIds field in the conversation model is related to the id field in the user model. This is necessary because Prisma needs to know how to relate the two models.
+}
+
+model Message{
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId // What this does is that it tells Prisma to use the _id field in MongoDB as the id field in Prisma. This is necessary because MongoDB uses _id as the default primary key field name. If you don't do this, Prisma will create a new id field in MongoDB and use that as the primary key instead.
+  body      String?
+  image     String?
+  createdAt DateTime  @default(now())
+
+  seenIds String[] @db.ObjectId // This is an array of user ids. This is necessary because MongoDB doesn't support many-to-many relationships. So we have to store the ids of the users that have seen a message in an array in the message model.
+  seen User[] @relation("Seen", fields: [seenIds], references: [id]) // This is the relationship. It tells Prisma that the seenIds field in the message model is related to the id field in the user model. This is necessary because Prisma needs to know how to relate the two models. The "Seen" is the name of the relationship. It is necessary because we have two relationships between the user and message models. One is the "messages" relationship and the other is the "seenMessages" relationship. So we have to give them different names so that Prisma can differentiate between them.
+
+  conversationId String @db.ObjectId
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade) // This is the relationship. It tells Prisma that the conversationId field in the message model is related to the id field in the conversation model. This is necessary because Prisma needs to know how to relate the two models.
+
+  senderId String @db.ObjectId
+  sender User @relation(fields: [senderId], references: [id], onDelete: Cascade) // This is the relationship. It tells Prisma that the senderId field in the message model is related to the id field in the user model. This is necessary because Prisma needs to know how to relate the two models.
+}
