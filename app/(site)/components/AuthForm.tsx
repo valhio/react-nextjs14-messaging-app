@@ -2,13 +2,20 @@
 
 import Button from "@/app/components/Button";
 import Input from "@/app/components/inputs/Input";
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import AuthSocialButton from "./AuthSocialButton";
 import { BsGithub, BsGoogle, BsFacebook } from "react-icons/bs";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type Variant = "LOGIN" | "REGISTER" | "FORGOT_PASSWORD";
 
@@ -19,8 +26,18 @@ interface AuthFormProps {
 
 // const AuthForm = ({onSelectedVariant}: AuthFormProps) => {
 const AuthForm = ({ setSelectedVariant }: AuthFormProps) => {
+  const session = useSession(); // useSession is a hook from the next-auth library that returns the session object. The session object contains the user's session data (e.g. name, email, etc.). If the user is not logged in, it returns null.
+  const router = useRouter();
   const [variant, setVariant] = useState<Variant>("LOGIN");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => { // useEffect is a hook that runs a function after the component is rendered. In this case, it runs the function when the session changes. This is useful when you want to do something when the session changes (e.g. show a toast message when the user logs in).
+    if (session?.status === "authenticated") {
+      router.push("/users");
+      toast.success("Logged in successfully");
+    }
+  }, [session?.status, router]);
+
 
   const toggleVariant = useCallback(() => {
     // useCallback is a hook that returns a memoized callback. What this means is that the function will only be created once, and then it will be reused on subsequent renders. This is useful when passing callbacks to optimized child components that rely on reference equality to prevent unnecessary renders (e.g. shouldComponentUpdate).
@@ -30,7 +47,8 @@ const AuthForm = ({ setSelectedVariant }: AuthFormProps) => {
     } else if (variant === "REGISTER") {
       setVariant("LOGIN");
       setSelectedVariant("LOGIN");
-    } else if (variant === "FORGOT_PASSWORD") {}
+    } else if (variant === "FORGOT_PASSWORD") {
+    }
   }, [variant, setSelectedVariant]); // this variable "variant" and "setSelectedVariant" are called inside the function, so we need to add them to the dependencies array
 
   const {
@@ -46,7 +64,8 @@ const AuthForm = ({ setSelectedVariant }: AuthFormProps) => {
     },
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => { // Should this run on client side or server side? If it runs on client side, then the user can see the error message. If it runs on server side, then the user cannot see the error message.
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    // Should this run on client side or server side? If it runs on client side, then the user can see the error message. If it runs on server side, then the user cannot see the error message.
     setIsLoading(true);
 
     if (variant === "LOGIN") {
