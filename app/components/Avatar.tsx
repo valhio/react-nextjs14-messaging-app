@@ -14,8 +14,7 @@ const Avatar: React.FC<AvatarProps> = ({ user }) => {
         <Image
           alt="avatar"
           src={
-            user?.image ||
-            `https://ui-avatars.com/api/?name=${user?.name}&background=random`
+            user?.image || '/images/placeholder.jpg'
           }
           fill
         />
