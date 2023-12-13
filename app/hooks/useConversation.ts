@@ -1,7 +1,7 @@
 import { useParams } from "next/navigation";
 import { useMemo } from "react";
 
-const useConversation = () => {
+const useConversation = () => { // This is a custom hook that we are going to use to get the conversation id from the URL
     const params = useParams(); // Get the params from the URL
 
     const conversationId = useMemo(() => { // What useMemo does is it will only run the function if the value of the dependency changes
