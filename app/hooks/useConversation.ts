@@ -5,9 +5,9 @@ const useConversation = () => { // This is a custom hook that we are going to us
     const params = useParams(); // Get the params from the URL
 
     const conversationId = useMemo(() => { // What useMemo does is it will only run the function if the value of the dependency changes
-        if (params?.conversationId) return '';
+        if (!params?.conversationId) return ''; // If there is no conversationId in the URL, return an empty string
 
-        return params.conversationId as string;
+        return params.conversationId as string; // Return the conversationId as a string
     }, [params?.conversationId]);
 
     const isOpen = useMemo(() => !!conversationId, [conversationId]); // !! is a double negation, which converts a value to a boolean
