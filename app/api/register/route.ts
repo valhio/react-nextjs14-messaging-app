@@ -19,7 +19,8 @@ export async function POST(request: Request) {
             data: {
                 email: email,
                 name,
-                hashedPassword: hashedPassword
+                hashedPassword: hashedPassword,
+                image: `https://ui-avatars.com/api/?name=${ name.toUpperCase() }&background=random&size=128&rounded=true&color=fff&bold=true`,
             }
         });
 
