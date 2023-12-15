@@ -22,6 +22,10 @@ const nextConfig = {
             {
                 protocol: 'https',
                 hostname: 'scontent.fsof10-1.fna.fbcdn.net', // Facebook
+            },
+            {
+                protocol: 'https',
+                hostname: 'res.cloudinary.com', // Cloudinary
             }
         ],
         // domains is deprecated
