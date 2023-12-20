@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import axios from "axios";
 import Avatar from "../../components/Avatar";
+import LoadingModal from "@/app/components/LoadingModal";
 
 interface UserListItemProps {
   data: User;
@@ -29,17 +30,20 @@ const UserListItem: React.FC<UserListItemProps> = ({ data }) => {
   }, [router, data]);
 
   return (
-    <div
-      onClick={handleClick}
-      className=" w-full relative flex items-center space-x-3 bg-white p-3 hover:bg-gray-100 rounded-lg transition cursor-pointer">
-      <Avatar user={data} />
-      <div className="min-w-0 flex-1">
-        <div className="text-sm font-medium text-gray-900 truncate">
-          {data.name}
+    <>
+      {isLoading && <LoadingModal />}
+      <div
+        onClick={handleClick}
+        className=" w-full relative flex items-center space-x-3 bg-white p-3 hover:bg-gray-100 rounded-lg transition cursor-pointer">
+        <Avatar user={data} />
+        <div className="min-w-0 flex-1">
+          <div className="text-sm font-medium text-gray-900 truncate">
+            {data.name}
+          </div>
+          <div className="text-sm text-gray-500 truncate">{data.email}</div>
         </div>
-        <div className="text-sm text-gray-500 truncate">{data.email}</div>
       </div>
-    </div>
+    </>
   );
 };
 
