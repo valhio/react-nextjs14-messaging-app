@@ -9,6 +9,7 @@ import { useCallback, useMemo } from "react";
 import clsx from "clsx";
 import Avatar from "@/app/components/Avatar";
 import { format } from "date-fns";
+import GroupAvatar from "@/app/components/GroupAvatar";
 
 interface ConversationListItemProps {
   data: FullConversationType;
@@ -60,7 +61,11 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
         "w-full relative flex items-center space-x-3 hover:bg-gray-100 rounded-lg p-3 cursor-pointer transition duration-200 ease-in-out",
         selected ? "bg-gray-100" : "bg:white"
       )}>
-      <Avatar user={otherUser} />
+        {data.isGroup ? (
+          <GroupAvatar users={data.users} />
+        ): (
+          <Avatar user={otherUser} />
+        )}
       <div className="min-w-0 flex-1">
         <div className="focus:outline-none">
           <div className="flex justify-between items-center mb-1">

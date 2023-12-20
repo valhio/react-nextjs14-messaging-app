@@ -10,6 +10,7 @@ import React, { Fragment } from "react";
 import { useMemo } from "react";
 import { IoAdd, IoClose, IoCloseSharp, IoTrash } from "react-icons/io5";
 import ConfirmModal from "./ConfirmModal";
+import GroupAvatar from "@/app/components/GroupAvatar";
 
 interface ProfileDrawerProps {
   isOpen: boolean;
@@ -126,11 +127,15 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                           <div className="flex flex-col justify-center items-center h-full">
                             <div className="flex flex-col items-center">
                               <div className="flex-shrink-0">
-                                <Avatar user={otherUser} />
+                                {data.isGroup ? (
+                                  <GroupAvatar users={data.users} />
+                                ) : (
+                                  <Avatar user={otherUser} />
+                                )}
                               </div>
                               <div className="mt-4">
                                 <span className="text-sm font-medium text-gray-900">
-                                  {otherUser.name}
+                                  {data.isGroup ? data.name : otherUser.name}
                                 </span>
                               </div>
                               <div>
@@ -138,13 +143,31 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                                   {statusText}
                                 </span>
                               </div>
-                              <hr className="mt-2 w-full" />
-                              {!data.isGroup && (
-                                <div className="mt-2">
-                                  <span className="text-sm text-gray-500">
-                                    {otherUser.email}
-                                  </span>
-                                </div>
+                              {!data.isGroup ? (
+                                <>
+                                  <hr className="mt-2 w-full" />
+                                  <div className="mt-2">
+                                    <span className="text-sm text-gray-500">
+                                      {otherUser.email}
+                                    </span>
+                                  </div>
+                                </>
+                              ) : (
+                                <>
+                                  <hr className="mt-2 w-full" />
+                                  <div className="mt-2">
+                                    {data.users.map((user) => (
+                                      <div
+                                        key={user.id}
+                                        className="flex items-center gap-2">
+                                        <Avatar user={user} />
+                                        <span className="text-sm text-gray-500">
+                                          {user.email}
+                                        </span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </>
                               )}
                               {!data.isGroup && (
                                 <div>
