@@ -9,6 +9,8 @@ import { useMemo, useState } from "react";
 import { HiChevronLeft, HiEllipsisHorizontal } from "react-icons/hi2";
 import ProfileDrawer from "./ProfileDrawer";
 import GroupAvatar from "@/app/components/GroupAvatar";
+import useActiveList from "@/app/hooks/useActiveList";
+import { is } from 'date-fns/locale';
 
 interface HeaderProps {
   conversation: Conversation & {
@@ -20,15 +22,16 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
   const otherUser = useOtherUser(conversation);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
+  const { members } = useActiveList();
+  const isActive = members.indexOf(otherUser?.email!) !== -1;
+
   const statusText = useMemo(() => {
     if (conversation.isGroup) {
       // If the conversation is a group chat, return the number of members as the status text
       return `${conversation.users.length} members`;
     }
-
-    //TODO: Implement the status text for a one-to-one conversation to be dynamic
-    return "Active";
-  }, [conversation]);
+    return isActive ? "Active" : "Offline";
+  }, [conversation, isActive]);
 
   return (
     <>
