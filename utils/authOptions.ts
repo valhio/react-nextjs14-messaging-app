@@ -56,7 +56,7 @@ export const authOptions: AuthOptions = {
     session: {
         strategy: "jwt", // We're using JWTs for sessions
     },
-    secret: process.env.NEXTAUTH_SECRET, // This is the secret used to sign the JWTs
+    secret: "SOME_RANDOM_STRING", // This is the secret used to sign the JWTs
 };
 
 function GithubProvider(arg0: { clientId: string; clientSecret: string; }): import("next-auth/providers/index").Provider {
