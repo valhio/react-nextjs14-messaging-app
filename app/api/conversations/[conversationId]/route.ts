@@ -2,6 +2,7 @@ import getCurrentUser from '@/app/actions/getCurrentUser';
 import { tr } from 'date-fns/locale';
 import { NextResponse } from 'next/server';
 import prisma from '@/app/libs/prismadb';
+import { pusherServer } from '@/app/libs/pusher';
 
 interface IParams {
     conversationId?: string;
@@ -27,7 +28,7 @@ export async function DELETE(
             }
         });
 
-        if (!conversation) return new NextResponse('Not Found', { status: 404 });
+        if (!conversation) return new NextResponse('Invalid ID', { status: 400 });
 
         // Check if the current user is in the conversation
         const isUserInConversation = conversation.users.find(user => user.id === currentUser.id);
@@ -40,6 +41,12 @@ export async function DELETE(
                 userIds: { // Check if the current user is in the conversation before deleting it
                     hasSome: [currentUser.id] // If the current user is in the conversation, delete it
                 }
+            }
+        });
+
+        conversation.users.forEach((user) => { // Loop over the users in the conversation and trigger a pusher event for each of them. Each user who is subscribed to the event and is listening to the channel, with the name of their email, will receive the deleted conversation
+            if(user.email) {
+                pusherServer.trigger(user.email!, 'conversation:remove', conversation); // Trigger the event to delete the conversation in the client side
             }
         });
 
