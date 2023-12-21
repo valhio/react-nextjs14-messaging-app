@@ -42,6 +42,20 @@ const UserListItem: React.FC<UserListItemProps> = ({ data }) => {
           </div>
           <div className="text-sm text-gray-500 truncate">{data.email}</div>
         </div>
+        <div className="flex-shrink-0">
+          <svg
+            className="h-4 w-4 text-gray-400 transform rotate-[270deg]"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor">
+            <path
+              fillRule="evenodd"
+              d="M6.293 5.293a1 1 0 011.414 0L12 9.586l4.293-4.293a1 1 0 111.414 
+             1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414z"
+              clipRule="evenodd"
+            />            
+          </svg>
+        </div>
       </div>
     </>
   );
