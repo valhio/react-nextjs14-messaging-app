@@ -30,10 +30,6 @@ export async function DELETE(
 
         if (!conversation) return new NextResponse('Invalid ID', { status: 400 });
 
-        // Check if the current user is in the conversation
-        const isUserInConversation = conversation.users.find(user => user.id === currentUser.id);
-        if (!isUserInConversation) return new NextResponse('Unauthorized', { status: 401 });
-
         // Delete the conversation
         const deletedConversation = await prisma.conversation.deleteMany({
             where: {
