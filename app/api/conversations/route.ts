@@ -1,8 +1,10 @@
+import { Conversation } from '@prisma/client';
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import { NextResponse } from "next/server";
 import prisma from "@/app/libs/prismadb";
+import { pusherServer } from '@/app/libs/pusher';
 
-export async function POST(
+export async function POST( // This function creates a new Conversation
     request: Request,
 ) {
     try {
@@ -42,6 +44,10 @@ export async function POST(
                 }
             })
 
+            newConversation.users.forEach( (user) => { // Loop over the users in the conversation and trigger a pusher event for each of them. Each user who is subscribed to the event and is listening to the channel, with the name of their email, will receive the new conversation
+                pusherServer.trigger(user.email!, 'conversation:new', newConversation); // Trigger the event to create the conversation in the client side
+            });
+
             return NextResponse.json(newConversation);
         } else { // If this is not a group conversation, create a conversation with just the current user and the user we are creating a conversation with
 
@@ -79,6 +85,11 @@ export async function POST(
                         users: true
                     }
                 });
+
+                newConversation.users.map((user)=>{ // Loop over the users in the conversation (in this case there are only 2 users, you and the other user) and trigger a pusher event for each of them. Each user who is subscribed to the event and is listening to the channel, with the name of their email, will receive the new conversation 
+                    pusherServer.trigger(user.email!, 'conversation:new', newConversation); // Trigger the event to create the conversation in the client side
+                })
+
                 return NextResponse.json(newConversation);
             }
         }
