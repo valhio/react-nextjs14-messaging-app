@@ -3,9 +3,9 @@
 // It is called when the user first loads the page.
 
 import { pusherServer } from "@/app/libs/pusher";
+import { authOptions } from "@/utils/authOptions";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/utils/authOptions";
 
 // It is used to display the user's active status to other users.
 export default async function handler(

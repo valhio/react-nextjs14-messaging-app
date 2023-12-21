@@ -2,6 +2,10 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { AuthOptions } from "next-auth";
 import prisma from "@/app/libs/prismadb";
 import bcrypt from 'bcrypt';
+import GithubProvider from "next-auth/providers/github"
+import GoogleProvider from "next-auth/providers/google";
+import FacebookProvider from "next-auth/providers/facebook";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions: AuthOptions = {
     adapter: PrismaAdapter(prisma),
@@ -56,26 +60,7 @@ export const authOptions: AuthOptions = {
     session: {
         strategy: "jwt", // We're using JWTs for sessions
     },
-    secret: "SOME_RANDOM_STRING", // This is the secret used to sign the JWTs
+    secret: process.env.NEXTAUTH_SECRET as string , // This is the secret used to sign the JWTs
 };
 
-function GithubProvider(arg0: { clientId: string; clientSecret: string; }): import("next-auth/providers/index").Provider {
-    throw new Error("Function not implemented.");
-}
-
-
-function GoogleProvider(arg0: { clientId: string; clientSecret: string; }): import("next-auth/providers/index").Provider {
-    throw new Error("Function not implemented.");
-}
-
-
-function FacebookProvider(arg0: { clientId: string; clientSecret: string; }): import("next-auth/providers/index").Provider {
-    throw new Error("Function not implemented.");
-}
-
-
-function CredentialsProvider(arg0: { // This handles the username/password login
-    name: string; credentials: { email: { label: string; type: string; }; password: { label: string; type: string; }; }; authorize(credentials: any): Promise<{ id: string; name: string | null; email: string | null; emailVerified: Date | null; image: string | null; hashedPassword: string | null; createdAt: Date; updatedAt: Date; conversationIds: string[]; seenMessageIds: string[]; }>;
-}): import("next-auth/providers/index").Provider {
-    throw new Error("Function not implemented.");
-}
+export default authOptions;

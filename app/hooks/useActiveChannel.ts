@@ -5,7 +5,7 @@ import { pusherClient } from "../libs/pusher";
 
 // This hook is used to keep track of the users who are currently active in the chat. 
 const useActiveChannel = () => {
-    const { set, add, remove } = useActiveList();
+  const { set, add, remove } = useActiveList();
   const [activeChannel, setActiveChannel] = useState<Channel | null>(null);
 
   useEffect(() => {
