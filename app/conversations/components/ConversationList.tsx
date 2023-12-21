@@ -73,6 +73,10 @@ const ConversationList: React.FC<ConversationListProps> = ({
       setItems((current) =>{
         return [...current.filter((conversation) => conversation.id !== deletedConversation.id)]
       })
+
+      if (conversationId === deletedConversation.id) { // If the conversation that was deleted is the conversation that is currently open (has the same id as the conversationId in the URL), we will redirect the User to the conversations page.
+        router.push("/conversations");
+      }
     };
 
     pusherClient.bind("conversation:new", newHandler);
@@ -85,7 +89,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
       pusherClient.unbind("conversation:update", updateHandler); // Unbind the updateHandler function from the conversation channel.
       pusherClient.unbind("conversation:remove", removeHandler); // Unbind the removeHandler function from the conversation channel.
     };
-  }, [pusherKey, conversationId]);
+  }, [pusherKey, conversationId, router]);
 
   return (
     <>
