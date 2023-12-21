@@ -61,7 +61,7 @@ export const authOptions: AuthOptions = {
     session: {
         strategy: "jwt", // We're using JWTs for sessions
     },
-    secret: process.env.NEXTAUTH_SECRET as string, // This is the secret used to sign the JWTs
+    secret: process.env.NEXTAUTH_SECRET, // This is the secret used to sign the JWTs
 };
 
 const handler = NextAuth(authOptions);
