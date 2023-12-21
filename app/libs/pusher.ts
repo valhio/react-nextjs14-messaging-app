@@ -10,6 +10,12 @@ export const pusherServer = new PusherServer({
 });
 
 export const pusherClient = new PusherClient(
-    process.env.NEXT_PUBLIC_PUSHER_APP_KEY!, {
-    cluster: 'eu',
-});
+    process.env.NEXT_PUBLIC_PUSHER_APP_KEY!,
+    {
+        channelAuthorization:{ // This is used to authenticate the user with Pusher.
+            endpoint: '/api/pusher/auth',
+            transport: 'ajax',
+        },
+        cluster: 'eu', // The cluster to which the client should connect.
+    }
+);
