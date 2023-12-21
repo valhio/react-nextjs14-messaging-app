@@ -3,6 +3,7 @@ import { tr } from 'date-fns/locale';
 import { NextResponse } from 'next/server';
 import prisma from '@/app/libs/prismadb';
 import { pusherServer } from '@/app/libs/pusher';
+import { User } from '@prisma/client';
 
 interface IParams {
     conversationId?: string;
@@ -40,7 +41,7 @@ export async function DELETE(
             }
         });
 
-        conversation.users.forEach((user) => { // Loop over the users in the conversation and trigger a pusher event for each of them. Each user who is subscribed to the event and is listening to the channel, with the name of their email, will receive the deleted conversation
+        conversation.users.forEach((user: User) => { // Loop over the users in the conversation and trigger a pusher event for each of them. Each user who is subscribed to the event and is listening to the channel, with the name of their email, will receive the deleted conversation
             if(user.email) {
                 pusherServer.trigger(user.email!, 'conversation:remove', conversation); // Trigger the event to delete the conversation in the client side
             }
