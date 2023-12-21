@@ -2,7 +2,7 @@
 
 import { Dialog, Transition } from "@headlessui/react";
 import React from "react";
-import { ClipLoader } from "react-spinners";
+import { BeatLoader, BounceLoader, ClipLoader, FadeLoader, PulseLoader } from "react-spinners";
 
 const LoadingModal = () => {
   // return /*#__PURE__*/React.createElement("div", {
@@ -29,7 +29,16 @@ const LoadingModal = () => {
         <div className="fixed inset-0 z-10 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
             <Dialog.Panel>
-                <ClipLoader size={40} color="#0284c7" />
+                {/* <ClipLoader size={40} color="#0284c7" /> */}
+                {/* <BounceLoader size={40} color="#0284c7" /> */}
+                {/* <FadeLoader size={40} color="#0284c7" /> */}
+                {/* <GridLoader size={40} color="#0284c7" /> */}
+                {/* <PropagateLoader size={40} color="#0284c7" /> */}
+                {/* <PuffLoader size={40} color="#0284c7" /> */}
+                {/* <BeatLoader size={15} color="#0284c7" /> */}
+                {/* <ScaleLoader size={15} color="#0284c7" /> */}
+                <PulseLoader size={15} color="#8E8E8E" speedMultiplier={0.5} />
+
             </Dialog.Panel>
           </div>
         </div>
