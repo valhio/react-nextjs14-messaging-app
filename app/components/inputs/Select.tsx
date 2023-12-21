@@ -38,21 +38,20 @@ const Select: React.FC<SelectProps> = ({
             // classNames is a prop that allows us to customize the select's class names.
             control: () => "text-sm", // control is a class name that is applied to the control element. It is also applied by default to the container element.
           }}
-        //   formatOptionLabel={(option) => (
-        //     // If the option is selected, we want to display the option's label only. If the option is not selected, we want to display the option's label and image. To do this, we use the formatOptionLabel prop.
-        //     <div className="flex items-center">
-        //       {option.image && (
-        //         <div className="relative inline-block rounded-full overflow-hidden h-6 w-6 mr-2">
-        //           <Image
-        //             alt={option.label}
-        //             src={option.image}
-        //             fill
-        //           />
-        //         </div>
-        //       )}
-        //       <div className="truncate">{option.label}</div>
-        //     </div>
-        //   )}
+          formatOptionLabel={(option) => ( // formatOptionLabel is a prop that allows us to customize the select's option labels. Without this prop, the select's option labels would be rendered as plain text. This particular prop allows us to render the option as image + text. 
+            <div className="flex items-center">
+              {option.image && (
+                <div className="relative inline-block rounded-full overflow-hidden h-6 w-6 mr-2">
+                  <Image
+                    alt={option.label}
+                    src={option.image}
+                    fill
+                  />
+                </div>
+              )}
+              <div className="truncate">{option.label}</div>
+            </div>
+          )}
         />
       </div>
     </div>
