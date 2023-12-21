@@ -55,13 +55,13 @@ const Body: React.FC<BodyProps> = ({ initialMessages }) => {
     };
 
     pusherClient.bind("messages:new", messageHandler); // What this does is it listens for new messages in the conversation channel. When a new message is received, it will call the messageHandler function.
-    pusherClient.bind("messages:update", updateMessageHandler); // What this does is it listens for a message update in the conversation channel. When a message is updated, it will call the updateMessageHandler function.
+    pusherClient.bind("message:update", updateMessageHandler); // What this does is it listens for a message update in the conversation channel. When a message is updated, it will call the updateMessageHandler function.
 
     return () => {
       // This is the cleanup function. It will run when the component unmounts.
       pusherClient.unsubscribe(conversationId); // Unsubscribe from the conversation channel in Pusher.
       pusherClient.unbind("messages:new", messageHandler); // Unbind the messageHandler function from the messages:new event. This is to prevent memory leaks.
-      pusherClient.unbind("messages:update", updateMessageHandler); // Unbind the updateMessageHandler function from the messages:update event. This is to prevent memory leaks.
+      pusherClient.unbind("message:update", updateMessageHandler); // Unbind the updateMessageHandler function from the messages:update event. This is to prevent memory leaks.
     };
   }, [conversationId]);
 

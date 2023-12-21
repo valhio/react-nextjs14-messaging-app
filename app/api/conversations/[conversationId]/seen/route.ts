@@ -59,13 +59,14 @@ export async function POST( // This function adds the current user to the seen l
     });
 
     await pusherServer.trigger(currentUser.email, 'conversation:update', { // Trigger the event to update the conversation in the client side. This will update the seen list of the last message in the conversation.
-      id: conversation.id,
+      id: conversationId,
       messages: [updatedMessage]
     });
 
-    if (lastMessage.seenIds.indexOf(currentUser.id) === -1) { // If the current user is not in the seen list of the last message, add them to the seen list
-      await pusherServer.trigger(conversationId!, 'message:update', updatedMessage); // Trigger the event to update the message in the client side. This will update the seen list of the last message in the conversation. Every user in the conversation(subscriber) will be notified that the current user has seen the last message.
+    if (lastMessage.seenIds.indexOf(currentUser.id) !== -1) { // If the current user is already in the seen list of the last message, return the conversation
+      return NextResponse.json(conversation, { status: 200 });
     }
+    await pusherServer.trigger(conversationId!, 'message:update', updatedMessage); // Trigger the event to update the message in the client side. This will update the seen list of the last message in the conversation. Every user in the conversation(subscriber) will be notified that the current user has seen the last message.
 
     return NextResponse.json(updatedMessage, { status: 200 });
   } catch (error: any) {
