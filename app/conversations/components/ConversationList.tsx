@@ -57,9 +57,12 @@ const ConversationList: React.FC<ConversationListProps> = ({
 
     const updateHandler = (newConversation: FullConversationType) => {
       setItems((current) =>
-        current.map((item) => { // Update the conversations state with the updated conversation.
-          if (item.id === newConversation.id) { // If we find a conversation in the current conversations with the same id as the new conversation, we will update/replace it with the new conversation.
-            return { // We are going to update the conversation's messages property with the new conversation's messages property, so that we can update the new message's preview, in the conversation list, in real time.
+        current.map((item) => {
+          // Update the conversations state with the updated conversation.
+          if (item.id === newConversation.id) {
+            // If we find a conversation in the current conversations with the same id as the new conversation, we will update/replace it with the new conversation.
+            return {
+              // We are going to update the conversation's messages property with the new conversation's messages property, so that we can update the new message's preview, in the conversation list, in real time.
               ...item,
               messages: newConversation.messages,
             };
@@ -70,18 +73,23 @@ const ConversationList: React.FC<ConversationListProps> = ({
     };
 
     const removeHandler = (deletedConversation: FullConversationType) => {
-      setItems((current) =>{
-        return [...current.filter((conversation) => conversation.id !== deletedConversation.id)]
-      })
+      setItems((current) => {
+        return [
+          ...current.filter(
+            (conversation) => conversation.id !== deletedConversation.id
+          ),
+        ];
+      });
 
-      if (conversationId === deletedConversation.id) { // If the conversation that was deleted is the conversation that is currently open (has the same id as the conversationId in the URL), we will redirect the User to the conversations page.
+      if (conversationId === deletedConversation.id) {
+        // If the conversation that was deleted is the conversation that is currently open (has the same id as the conversationId in the URL), we will redirect the User to the conversations page.
         router.push("/conversations");
       }
     };
 
     pusherClient.bind("conversation:new", newHandler);
     pusherClient.bind("conversation:update", updateHandler);
-    pusherClient.bind('conversation:remove', removeHandler)
+    pusherClient.bind("conversation:remove", removeHandler);
 
     return () => {
       pusherClient.unsubscribe(pusherKey); // Unsubscribe to the conversation channel in Pusher.
@@ -100,25 +108,29 @@ const ConversationList: React.FC<ConversationListProps> = ({
       />
       <aside
         className={clsx(
-          "fixed inset-y-0 pb-20 lg:pb-0 lg:left-20 lg:w-80 lg:block overflow-y-auto border-r border-gray-200",
+          "fixed inset-y-0 pb-20 lg:pb-0 lg:left-16 lg:w-80 lg:block overflow-y-auto border-r border-gray-200",
           isOpen ? "hidden" : "block w-full left-0"
         )}>
-        <div className="px-5">
-          <div className="flex justify-between mb-4 pt-4">
-            <div className="text-lg font-bold text-neutral-800">Messages</div>
+        <div className="px-4">
+          <div className="flex justify-between my-3 ">
+            <div className="text-lg flex items-center font-bold text-neutral-800 pointer-events-none">
+              Messages
+            </div>
             <div
               onClick={() => setIsModalOpen(true)}
               className="rounded-full p-2 bg-gray-100 text-gray-600 cursor-pointer hover:opacity-75 transition duration-200 ease-in-out">
-              <MdOutlineGroupAdd size={20} />
+              <MdOutlineGroupAdd size={18} />
             </div>
           </div>
-          {items.map((item) => (
-            <ConversationListItem
-              key={item.id}
-              data={item}
-              selected={conversationId === item.id}
-            />
-          ))}
+          <div className="md:pt-2">
+            {items.map((item) => (
+              <ConversationListItem
+                key={item.id}
+                data={item}
+                selected={conversationId === item.id}
+              />
+            ))}
+          </div>
         </div>
       </aside>
     </>

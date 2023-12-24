@@ -30,14 +30,15 @@ const Select: React.FC<SelectProps> = ({
           isMulti={true}
           options={options}
           menuPortalTarget={document.body} // menuPortalTarget is a prop that allows the menu to be rendered outside of the DOM hierarchy of the parent component. Because the select is rendered inside a modal, it causes problems with z-index and overflowing.
-          styles={{
-            // styles is a prop that allows us to customize the select's styles.
+          styles={{ // styles is a prop that allows us to customize the select's styles.
             menuPortal: (base) => ({ ...base, zIndex: 9999 }), // menuPortal is a style that allows us to customize the menuPortal's styles. We set the z-index to 9999 to make sure that the menuPortal is rendered on top of everything else. Base is the default style object.
           }}
-          classNames={{
-            // classNames is a prop that allows us to customize the select's class names.
-            control: () => "text-sm", // control is a class name that is applied to the control element. It is also applied by default to the container element.
-          }}
+          classNames={{ // classNames is a prop that allows us to customize the select's class names.
+            control: () => "text-sm", // control is a class name that is applied to the control element.
+            // menu: () => "text-sm", // menu is a class name that is applied to the menu element.
+            // menuList: () => "text-sm", // menuList is a class name that is applied to the menuList element.
+            // option: () => "text-sm", // option is a class name that is applied to the option element.
+            }}
           formatOptionLabel={(option) => ( // formatOptionLabel is a prop that allows us to customize the select's option labels. Without this prop, the select's option labels would be rendered as plain text. This particular prop allows us to render the option as image + text. 
             <div className="flex items-center">
               {option.image && (

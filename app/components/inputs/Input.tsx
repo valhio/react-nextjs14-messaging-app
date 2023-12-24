@@ -40,7 +40,7 @@ const Input: React.FC<InputProps> = ({
           disabled={disabled}
           {...register(id, { required: required })}
           className={clsx( // clsx is a tiny utility for constructing className strings conditionally.
-            "form-input block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm", // form-input is a tailwind class that is used to style the input. It comes from the manually installed tailwindcss-forms plugin.
+            "form-input block w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm", // form-input is a tailwind class that is used to style the input. It comes from the manually installed tailwindcss-forms plugin.
             errors[id] && "border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500",
             disabled && "bg-gray-100 cursor-not-allowed"
             // errors[id]

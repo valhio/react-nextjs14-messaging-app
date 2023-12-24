@@ -40,12 +40,12 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
         isOpen={drawerOpen}
         onClose={() => setDrawerOpen(false)}
       />
-      <div className="bg-white w-full flex border-b-[1px] sm:px-4 py-3 px-4 lg:px-6 justify-between items-center shadow-sm">
+      <div className="bg-white w-full flex border-b-[1px] px-2 sm:px-4 lg:px-6 py-1 md:py-2 justify-between items-center shadow-sm">
         <div className="flex gap-3 items-center">
           <Link
             href="/conversations"
             className="lg:hidden block text-gray-500 hover:text-gray-700">
-            <HiChevronLeft size={32} />
+            <HiChevronLeft size={28} />
           </Link>
           {conversation.isGroup ? (
             <GroupAvatar users={conversation.users} />

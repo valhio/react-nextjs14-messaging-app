@@ -127,8 +127,8 @@ const AuthForm = ({ setSelectedVariant }: AuthFormProps) => {
 
   // handleSubmit passes the form data to the onSubmit function when the form is submitted. It also prevents the default browser behavior of reloading the page.
   return (
-    <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+    <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-md">
+      <div className="bg-white py-8 px-4 shadow rounded-lg sm:px-10">
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           {variant === "REGISTER" && (
             <Input

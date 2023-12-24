@@ -126,7 +126,7 @@ const GroupChatModal: React.FC<GroupChatModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-neutral-900 hover:text-neutral-700">
+            className="px-4 py-2 text-sm font-medium text-neutral-900 hover:text-neutral-700 hover:bg-neutral-100 rounded-md border border-neutral-300 ">
             Cancel
           </button>
           <button
